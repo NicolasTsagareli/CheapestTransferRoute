@@ -1,0 +1,9 @@
+{
+  "maxWeight": 10,
+  "availableTransfers": [
+    {
+      "weight": 5,
+      "cost": 10
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "selectedTransfers": [
+    {
+      "weight": 10,
+      "cost": 5
+    },
+    {
+      "weight": 5,
+      "cost": 7
+    }
+  ],
+  "totalCost": 12,
+  "totalWeight": 15
+}
