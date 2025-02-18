@@ -6,6 +6,7 @@ import zerobyte.cheapesttransferroute.model.TransferResponse;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import static java.lang.Math.max;
@@ -20,6 +21,7 @@ public class TransferServiceImpl implements TransferService{
     public TransferResponse selectTransfers(TransferRequest transferRequest) {
         // Maximum weight, maxWeight, that can be transferred (Size of a Knapsack).
         int W = transferRequest.getMaxWeight();
+        int maxBatchWeight = transferRequest.getMaxBatchWeight();
         if(W <= 0) {
             return new TransferResponse(Collections.emptyList(), 0, 0);
         }
@@ -40,7 +42,8 @@ public class TransferServiceImpl implements TransferService{
         // Whichever gives the maximum must be done.
         for (int i=1; i<=n; i++) {
             for (int j = W; j>=weights[i]; j--) {
-                dp[i][j] = max(dp[i-1][j], dp[i-1][j-weights[i]]+costs[i]);
+                if(weights[i] > maxBatchWeight) dp[i][j] = dp[i-1][j];
+                else dp[i][j] = max(dp[i-1][j], dp[i-1][j-weights[i]]+costs[i]);
             }
         }
         int totalCost = dp[n][W];
@@ -60,9 +63,34 @@ public class TransferServiceImpl implements TransferService{
         }
 
         List<Transfer> selectedTransfers = new ArrayList<>();
+
         copySelectedTransfers(availableTransfers, isSelected, selectedTransfers);
 
-        TransferResponse transferResponse = new TransferResponse(selectedTransfers, totalCost, totalWeight);
+        List<List<Transfer>> batches = new LinkedList<>();
+
+        int batchCount;
+        if(totalWeight % maxBatchWeight == 0) batchCount = totalWeight/maxBatchWeight;
+        else batchCount = totalWeight/maxBatchWeight + 1;
+
+        while(selectedTransfers.size() != 0) {
+            List<Transfer> batch = new LinkedList<>();
+            int batchWeight = maxBatchWeight;
+            for (int i = 0; i < selectedTransfers.size(); i++) {
+                Transfer transfer = selectedTransfers.get(i);
+                if(transfer.getWeight() <= batchWeight) {
+                    batch.add(transfer);
+                    batchWeight -= transfer.getWeight();
+
+                    if(batchWeight == 0) break;
+                }
+            }
+            for (Transfer t : batch) {
+                selectedTransfers.remove(t);
+            }
+            batches.add(batch);
+        }
+
+        TransferResponse transferResponse = new TransferResponse(batches, totalCost, totalWeight);
 
         return transferResponse;
     }

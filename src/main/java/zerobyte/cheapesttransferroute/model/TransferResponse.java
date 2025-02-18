@@ -3,25 +3,25 @@ package zerobyte.cheapesttransferroute.model;
 import java.util.List;
 
 public class TransferResponse {
-    private List<Transfer> selectedTransfers;
+    private List<List<Transfer>> batches;
     private int totalCost;
     private int totalWeight;
 
     public TransferResponse() {
     }
 
-    public TransferResponse(List<Transfer> selectedTransfers, int totalCost, int totalWeight) {
-        this.selectedTransfers = selectedTransfers;
+    public TransferResponse(List<List<Transfer>> batches, int totalCost, int totalWeight) {
+        this.batches = batches;
         this.totalCost = totalCost;
         this.totalWeight = totalWeight;
     }
 
-    public List<Transfer> getSelectedTransfers() {
-        return selectedTransfers;
+    public List<List<Transfer>> getBatches() {
+        return batches;
     }
 
-    public void setSelectedTransfers(List<Transfer> selectedTransfers) {
-        this.selectedTransfers = selectedTransfers;
+    public void setBatches(List<List<Transfer>> batches) {
+        this.batches = batches;
     }
 
     public int getTotalCost() {

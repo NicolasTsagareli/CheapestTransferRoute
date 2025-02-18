@@ -1,10 +1,7 @@
 package zerobyte.cheapesttransferroute.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import zerobyte.cheapesttransferroute.model.TransferRequest;
 import zerobyte.cheapesttransferroute.model.TransferResponse;
 import zerobyte.cheapesttransferroute.service.TransferService;
@@ -20,7 +17,7 @@ public class TransferController {
         transferService = new TransferServiceImpl();
     }
 
-    @PostMapping("/select")
+    @GetMapping("/select")
     public TransferResponse selectTransfers(@RequestBody TransferRequest request) {
         return transferService.selectTransfers(request);
     }
